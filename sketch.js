@@ -3,13 +3,13 @@ Creative Programming II
 
 Randiel Zoquier
 
-Mask project "Owl Vision";
+Mask project - "Owl Vision"
 
 */
 
 let video, visionVid; // video feeds
 let vision; // a graphics for the vision field
-let loading = true;
+let loading = true; //keep track of loading screen
 let model, face; // our tracking model - face stuff
 let logo; // logo for loading loading loading screen
 
@@ -36,8 +36,11 @@ function preload(){
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
+  //chose the fact and shuffle colors
   fact = owlFacts[int(random(0, owlFacts.length))];
   shuffle(colors);
+
   video = createCapture(VIDEO);
   visionVid = createCapture(VIDEO);
   video.hide();
@@ -63,7 +66,7 @@ function draw() {
     image(video, 0, 0, width, height);
     filter(GRAY);
 
-      //"filter"
+    //"filter"
     rectMode(CORNER);
     fill(0,200);
     noStroke();
@@ -71,10 +74,10 @@ function draw() {
 
     if(face !== undefined){
       loading = false;
-      //noCursor();
       mask(face);
       visionCircles(face);
     }
+
   pop();
 
   if(loading){
@@ -86,7 +89,7 @@ function windowResized(){
   setup();
 }
 
-//just to keep things tidy, loading sceren stuff
+//just to keep things tidy, loading screen stuff
 function loadingScreen(){
  background(0,255,100);
  imageMode(CENTER);
@@ -115,11 +118,11 @@ function loadingScreen(){
 }
 
 
-//mask portion
+//mask construction
 function mask(face){
   randomSeed(0);
+
   var faceWidth = face.boundingBox.bottomRight[0] - face.boundingBox.topLeft[0];
-  var FaceHeight = face.boundingBox.bottomRight[1] - face.boundingBox.topLeft[1];
 
   //calculating all the points needed
   var leftEyeCenter = centerPoint(scalePoint(face.scaledMesh[159]), scalePoint(face.scaledMesh[145]));
@@ -144,6 +147,7 @@ function mask(face){
   var r = extendedPoint(scalePoint(face.scaledMesh[104]), p,  7);
   var s = extendedPoint(scalePoint(face.scaledMesh[333]), q, 7);
 
+  //render the eyes
   noFill();
   stroke(0,255,100);
   strokeWeight(faceWidth / 40);
@@ -154,6 +158,7 @@ function mask(face){
   circle(leftEyeCenter.x, leftEyeCenter.y, faceWidth * 0.3);
   circle(rightEyeCenter.x, rightEyeCenter.y, faceWidth * 0.3);
 
+  //render the mask
   noStroke();
   fill(colors[0]); //1
   triangle(a.x, a.y, b.x, b.y, c.x, c.y);
@@ -197,20 +202,13 @@ function mask(face){
   fill(colors[13]); //14
   triangle(s.x, s.y, q.x, q.y, o.x, o.y);
 
-
 }
 
 
 function visionCircles(face){
 
-  //figure out propogation of circles
 
-  /* left and right positions are linked (perhaps have a central "position they are based on")
-    simple, smooth propigation (left right oscilating, match height with mask?)
-    OR
-    map position with head position! (inverted axis!)
-  */
-  //bounding boxes of the cicles based on position of face
+  //finding positions of the head and setting the center of the vision circles
   var centerHead = scalePoint(face.scaledMesh[168]);
   var centerCircles = createVector(map(centerHead.x, 0, width, width * 1.2, 0), map(centerHead.y, 0, height, height * 1.35, 0));
   var circleOffset = map(abs(centerHead.y - height/2), 0, height /2, width * 0.27, width * 0.15) - map(abs(centerHead.x - width / 2), 0, width/2, 0, width * 0.15);
@@ -219,9 +217,8 @@ function visionCircles(face){
   var leftEyeCenter = centerPoint(scalePoint(face.scaledMesh[159]), scalePoint(face.scaledMesh[145]));
   var rightEyeCenter = centerPoint(scalePoint(face.scaledMesh[386]), scalePoint(face.scaledMesh[374]));
   var faceWidth = face.boundingBox.bottomRight[0] - face.boundingBox.topLeft[0];
+
   //interpolated rings
-
-
   for(var i = 0; i < 12; i++){
     var newSize = map(i, 0, 12, circleSize, faceWidth * 0.33);
     var leftPosX = map(i, 0, 12, centerCircles.x - circleOffset, leftEyeCenter.x);
@@ -243,7 +240,6 @@ function visionCircles(face){
   image(visionVid, 0, 0, width, height);
 
   //rotating things
-
   noFill();
   stroke(0, 255, 100);
   strokeWeight(6);
@@ -288,7 +284,7 @@ function extendedPoint(p1, p2, scalar){
   let y = scalar * (p2.y - p1.y) + p1.y;
   return createVector(x,y);
 }
-//a point  somewhere between 2 points
+//a point somewhere between 2 points (scalar is from 0-1)
 function midPoint(p1, p2, scalar){
   let x = p1.x + ((p2.x - p1.x) * scalar);
   let y = p1.y + ((p2.y - p1.y) * scalar);
