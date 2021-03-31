@@ -5,7 +5,9 @@
 
   This is a virtual mask created for Creative Programming II class. It uses tensorflow.js and the [FaceMesh](https://github.com/tensorflow/tfjs-models/tree/master/facemesh) model to track your face and superimpose an owl mask on your face. The mask also creates circles of "vision" that extend from your eyes and creates pockets of color in an otherwise greyscale video feed.
 
-  [link to video]()
+  [link to video](https://youtu.be/SU0atboS5fg)
+
+  [try it our for yourself!](https://randielzoquier.com/web_projects/owlvision/)
 
 ##Inspiration
 
