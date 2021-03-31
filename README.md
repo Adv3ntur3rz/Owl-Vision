@@ -1,7 +1,7 @@
 
 # Owl Vision
 
-  ![Owl Vision Gif]()
+  ![Owl Vision Gif](https://github.com/Adv3ntur3rz/Owl-Vision/blob/main/images/owlVision.gif)
 
   This is a virtual mask created for Creative Programming II class. It uses tensorflow.js and the [FaceMesh](https://github.com/tensorflow/tfjs-models/tree/master/facemesh) model to track your face and superimpose an owl mask on your face. The mask also creates circles of "vision" that extend from your eyes and creates pockets of color in an otherwise greyscale video feed.
 
